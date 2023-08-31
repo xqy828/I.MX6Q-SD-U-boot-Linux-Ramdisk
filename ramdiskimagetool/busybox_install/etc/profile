@@ -1,0 +1,5 @@
+#export PS1="\e[0;31mzynq>\e[m "
+HOSTNAME=`/bin/hostname`
+PS1='[\u@\h \w]\$ '
+
+export PS1 HOSTNAME

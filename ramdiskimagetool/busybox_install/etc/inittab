@@ -1,0 +1,9 @@
+#etc/inittab
+::sysinit:/etc/init.d/rcS
+::sysinit:/bin/hostname imx6q
+#console::askfirst:-/bin/sh
+::respawn:-/bin/login 
+::restart:/sbin/init
+::ctrlaltdel:/sbin/reboot
+::shutdown:/bin/umount -a -r
+::shutdown:/sbin/swapoff -a
