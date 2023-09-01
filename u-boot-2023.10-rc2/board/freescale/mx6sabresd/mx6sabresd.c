@@ -51,6 +51,13 @@ DECLARE_GLOBAL_DATA_PTR;
 
 #define KEY_VOL_UP	IMX_GPIO_NR(1, 4)
 
+#define cpu_constant_swab32(x) ((unsigned int)(				   \
+	(((unsigned int)(x) & (unsigned int)0x000000ffUL) << 24) | \
+	(((unsigned int)(x) & (unsigned int)0x0000ff00UL) <<  8) | \
+	(((unsigned int)(x) & (unsigned int)0x00ff0000UL) >>  8) | \
+	(((unsigned int)(x) & (unsigned int)0xff000000UL) >> 24)))
+
+
 int dram_init(void)
 {
 	gd->ram_size = imx_ddr_size();
@@ -58,8 +65,10 @@ int dram_init(void)
 }
 
 static iomux_v3_cfg_t const uart1_pads[] = {
-	IOMUX_PADS(PAD_CSI0_DAT10__UART1_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
-	IOMUX_PADS(PAD_CSI0_DAT11__UART1_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
+	//IOMUX_PADS(PAD_CSI0_DAT10__UART1_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
+	//IOMUX_PADS(PAD_CSI0_DAT11__UART1_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
+    IOMUX_PADS(PAD_SD3_DAT6__UART1_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
+    IOMUX_PADS(PAD_SD3_DAT7__UART1_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL)),
 };
 
 static iomux_v3_cfg_t const usdhc2_pads[] = {
@@ -69,11 +78,11 @@ static iomux_v3_cfg_t const usdhc2_pads[] = {
 	IOMUX_PADS(PAD_SD2_DAT1__SD2_DATA1	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
 	IOMUX_PADS(PAD_SD2_DAT2__SD2_DATA2	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
 	IOMUX_PADS(PAD_SD2_DAT3__SD2_DATA3	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_NANDF_D4__SD2_DATA4	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_NANDF_D5__SD2_DATA5	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_NANDF_D6__SD2_DATA6	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_NANDF_D7__SD2_DATA7	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_NANDF_D2__GPIO2_IO02	| MUX_PAD_CTRL(NO_PAD_CTRL)), /* CD */
+	//IOMUX_PADS(PAD_NANDF_D4__SD2_DATA4	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
+	//IOMUX_PADS(PAD_NANDF_D5__SD2_DATA5	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
+	//IOMUX_PADS(PAD_NANDF_D6__SD2_DATA6	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
+	//IOMUX_PADS(PAD_NANDF_D7__SD2_DATA7	| MUX_PAD_CTRL(USDHC_PAD_CTRL)),
+	IOMUX_PADS(PAD_GPIO_4__GPIO1_IO04	| MUX_PAD_CTRL(NO_PAD_CTRL)), /* CD */
 };
 
 static iomux_v3_cfg_t const usdhc3_pads[] = {
@@ -83,10 +92,10 @@ static iomux_v3_cfg_t const usdhc3_pads[] = {
 	IOMUX_PADS(PAD_SD3_DAT1__SD3_DATA1 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
 	IOMUX_PADS(PAD_SD3_DAT2__SD3_DATA2 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
 	IOMUX_PADS(PAD_SD3_DAT3__SD3_DATA3 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_SD3_DAT4__SD3_DATA4 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_SD3_DAT5__SD3_DATA5 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_SD3_DAT6__SD3_DATA6 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
-	IOMUX_PADS(PAD_SD3_DAT7__SD3_DATA7 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
+	//IOMUX_PADS(PAD_SD3_DAT4__SD3_DATA4 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
+	//IOMUX_PADS(PAD_SD3_DAT5__SD3_DATA5 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
+	//IOMUX_PADS(PAD_SD3_DAT6__SD3_DATA6 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
+	//IOMUX_PADS(PAD_SD3_DAT7__SD3_DATA7 | MUX_PAD_CTRL(USDHC_PAD_CTRL)),
 	IOMUX_PADS(PAD_NANDF_D0__GPIO2_IO00    | MUX_PAD_CTRL(NO_PAD_CTRL)), /* CD */
 };
 
@@ -187,12 +196,12 @@ struct fsl_esdhc_cfg usdhc_cfg[3] = {
 	{USDHC4_BASE_ADDR},
 };
 
-#define USDHC2_CD_GPIO	IMX_GPIO_NR(2, 2)
+#define USDHC2_CD_GPIO	IMX_GPIO_NR(1, 4)
 #define USDHC3_CD_GPIO	IMX_GPIO_NR(2, 0)
 
 int board_mmc_get_env_dev(int devno)
 {
-	return devno - 1;
+    return devno - 1;
 }
 
 int board_mmc_getcd(struct mmc *mmc)
@@ -472,7 +481,8 @@ int board_init(void)
 
 int power_init_board(void)
 {
-	struct udevice *dev;
+#if 0
+    struct udevice *dev;
 	unsigned int reg;
 	int ret;
 
@@ -498,7 +508,7 @@ int power_init_board(void)
 	reg &= ~LDO_VOL_MASK;
 	reg |= LDOB_3_00V;
 	pmic_reg_write(dev, PFUZE100_VGEN5VOL, reg);
-
+#endif
 	return 0;
 }
 
@@ -570,89 +580,89 @@ static void ccgr_init(void)
 }
 
 static int mx6q_dcd_table[] = {
-	0x020e0798, 0x000C0000,
-	0x020e0758, 0x00000000,
-	0x020e0588, 0x00000030,
-	0x020e0594, 0x00000030,
-	0x020e056c, 0x00000030,
-	0x020e0578, 0x00000030,
-	0x020e074c, 0x00000030,
-	0x020e057c, 0x00000030,
-	0x020e058c, 0x00000000,
-	0x020e059c, 0x00000030,
-	0x020e05a0, 0x00000030,
-	0x020e078c, 0x00000030,
-	0x020e0750, 0x00020000,
-	0x020e05a8, 0x00000030,
-	0x020e05b0, 0x00000030,
-	0x020e0524, 0x00000030,
-	0x020e051c, 0x00000030,
-	0x020e0518, 0x00000030,
-	0x020e050c, 0x00000030,
-	0x020e05b8, 0x00000030,
-	0x020e05c0, 0x00000030,
-	0x020e0774, 0x00020000,
-	0x020e0784, 0x00000030,
-	0x020e0788, 0x00000030,
-	0x020e0794, 0x00000030,
-	0x020e079c, 0x00000030,
-	0x020e07a0, 0x00000030,
-	0x020e07a4, 0x00000030,
-	0x020e07a8, 0x00000030,
-	0x020e0748, 0x00000030,
-	0x020e05ac, 0x00000030,
-	0x020e05b4, 0x00000030,
-	0x020e0528, 0x00000030,
-	0x020e0520, 0x00000030,
-	0x020e0514, 0x00000030,
-	0x020e0510, 0x00000030,
-	0x020e05bc, 0x00000030,
-	0x020e05c4, 0x00000030,
-	0x021b0800, 0xa1390003,
-	0x021b080c, 0x001F001F,
-	0x021b0810, 0x001F001F,
-	0x021b480c, 0x001F001F,
-	0x021b4810, 0x001F001F,
-	0x021b083c, 0x43270338,
-	0x021b0840, 0x03200314,
-	0x021b483c, 0x431A032F,
-	0x021b4840, 0x03200263,
-	0x021b0848, 0x4B434748,
-	0x021b4848, 0x4445404C,
-	0x021b0850, 0x38444542,
-	0x021b4850, 0x4935493A,
-	0x021b081c, 0x33333333,
-	0x021b0820, 0x33333333,
-	0x021b0824, 0x33333333,
-	0x021b0828, 0x33333333,
-	0x021b481c, 0x33333333,
-	0x021b4820, 0x33333333,
-	0x021b4824, 0x33333333,
-	0x021b4828, 0x33333333,
-	0x021b08b8, 0x00000800,
-	0x021b48b8, 0x00000800,
-	0x021b0004, 0x00020036,
-	0x021b0008, 0x09444040,
-	0x021b000c, 0x555A7975,
-	0x021b0010, 0xFF538F64,
-	0x021b0014, 0x01FF00DB,
-	0x021b0018, 0x00001740,
-	0x021b001c, 0x00008000,
-	0x021b002c, 0x000026d2,
-	0x021b0030, 0x005A1023,
-	0x021b0040, 0x00000027,
-	0x021b0000, 0x831A0000,
-	0x021b001c, 0x04088032,
-	0x021b001c, 0x00008033,
-	0x021b001c, 0x00048031,
-	0x021b001c, 0x09408030,
-	0x021b001c, 0x04008040,
-	0x021b0020, 0x00005800,
-	0x021b0818, 0x00011117,
-	0x021b4818, 0x00011117,
-	0x021b0004, 0x00025576,
-	0x021b0404, 0x00011006,
-	0x021b001c, 0x00000000,
+     0x020e0798, cpu_constant_swab32(0x00000c00),
+	 0x020e0758, cpu_constant_swab32(0x00000000),
+     0x020e0588, cpu_constant_swab32(0x30000000),
+     0x020e0594, cpu_constant_swab32(0x30000000),
+     0x020e056c, cpu_constant_swab32(0x30000000),
+     0x020e0578, cpu_constant_swab32(0x30000000),
+     0x020e074c, cpu_constant_swab32(0x30000000),
+     0x020e057c, cpu_constant_swab32(0x30000000),
+     0x020e058c, cpu_constant_swab32(0x00000000),
+     0x020e059c, cpu_constant_swab32(0x30000000),
+     0x020e05a0, cpu_constant_swab32(0x30000000),
+     0x020e078c, cpu_constant_swab32(0x30000000),
+     0x020e0750, cpu_constant_swab32(0x00000200),
+     0x020e05a8, cpu_constant_swab32(0x18000000),
+     0x020e05b0, cpu_constant_swab32(0x18000000),
+     0x020e0524, cpu_constant_swab32(0x18000000),
+     0x020e051c, cpu_constant_swab32(0x18000000),
+     0x020e0518, cpu_constant_swab32(0x18000000),
+     0x020e050c, cpu_constant_swab32(0x18000000),
+     0x020e05b8, cpu_constant_swab32(0x18000000),
+     0x020e05c0, cpu_constant_swab32(0x18000000),
+     0x020e0774, cpu_constant_swab32(0x00000200),
+     0x020e0784, cpu_constant_swab32(0x18000000),
+     0x020e0788, cpu_constant_swab32(0x18000000),
+     0x020e0794, cpu_constant_swab32(0x18000000),
+     0x020e079c, cpu_constant_swab32(0x18000000),
+     0x020e07a0, cpu_constant_swab32(0x18000000),
+     0x020e07a4, cpu_constant_swab32(0x18000000),
+     0x020e07a8, cpu_constant_swab32(0x18000000),
+     0x020e0748, cpu_constant_swab32(0x18000000),
+     0x020e05ac, cpu_constant_swab32(0x18000000),
+     0x020e05b4, cpu_constant_swab32(0x18000000),
+     0x020e0528, cpu_constant_swab32(0x18000000),
+     0x020e0520, cpu_constant_swab32(0x18000000),
+     0x020e0514, cpu_constant_swab32(0x18000000),
+     0x020e0510, cpu_constant_swab32(0x18000000),
+     0x020e05bc, cpu_constant_swab32(0x18000000),
+     0x020e05c4, cpu_constant_swab32(0x18000000),
+     0x021b0800, cpu_constant_swab32(0x030039a1),
+     0x021b080c, cpu_constant_swab32(0x1f001f00),
+     0x021b0810, cpu_constant_swab32(0x1f001f00),
+     0x021b480c, cpu_constant_swab32(0x1f001f00),
+     0x021b4810, cpu_constant_swab32(0x1f001f00),
+     0x021b083c, cpu_constant_swab32(0x3f033343),
+     0x021b0840, cpu_constant_swab32(0x1d032c03),
+     0x021b483c, cpu_constant_swab32(0x32032043),
+     0x021b4840, cpu_constant_swab32(0x6a021a03),
+     0x021b0848, cpu_constant_swab32(0x4647464d),
+     0x021b4848, cpu_constant_swab32(0x4d3f4547),
+     0x021b0850, cpu_constant_swab32(0x4044433e),
+     0x021b4850, cpu_constant_swab32(0x39483847),
+     0x021b081c, cpu_constant_swab32(0x33333333),
+     0x021b0820, cpu_constant_swab32(0x33333333),
+     0x021b0824, cpu_constant_swab32(0x33333333),
+     0x021b0828, cpu_constant_swab32(0x33333333),
+     0x021b481c, cpu_constant_swab32(0x33333333),
+     0x021b4820, cpu_constant_swab32(0x33333333),
+     0x021b4824, cpu_constant_swab32(0x33333333),
+     0x021b4828, cpu_constant_swab32(0x33333333),
+     0x021b08b8, cpu_constant_swab32(0x00080000),
+     0x021b48b8, cpu_constant_swab32(0x00080000),
+     0x021b0004, cpu_constant_swab32(0x36000200),
+     0x021b0008, cpu_constant_swab32(0x40404409),
+     0x021b000c, cpu_constant_swab32(0x55798f8a),
+     0x021b0010, cpu_constant_swab32(0x648f32ff),
+     0x021b0014, cpu_constant_swab32(0xdb00ff01),
+     0x021b0018, cpu_constant_swab32(0x40170000),
+     0x021b001c, cpu_constant_swab32(0x00800000),
+     0x021b002c, cpu_constant_swab32(0xd2260000),
+     0x021b0030, cpu_constant_swab32(0x23108f00),
+     0x021b0040, cpu_constant_swab32(0x47000000),
+     0x021b0000, cpu_constant_swab32(0x00001a84),
+     0x021b001c, cpu_constant_swab32(0x32800804),
+     0x021b001c, cpu_constant_swab32(0x33800000),
+     0x021b001c, cpu_constant_swab32(0x31800400),
+     0x021b001c, cpu_constant_swab32(0x30804009),
+     0x021b001c, cpu_constant_swab32(0x40800004),
+     0x021b0020, cpu_constant_swab32(0x00580000),
+     0x021b0818, cpu_constant_swab32(0x17110100),
+     0x021b4818, cpu_constant_swab32(0x17110100),
+     0x021b0004, cpu_constant_swab32(0x76550200),
+     0x021b0404, cpu_constant_swab32(0x06100100),
+     0x021b001c, cpu_constant_swab32(0x00000000),
 };
 
 static int mx6qp_dcd_table[] = {
