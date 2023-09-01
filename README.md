@@ -3,6 +3,10 @@
 #### 介绍
 I.MX6Q SD卡启动 + U-boot 2023.10-rc2 + Linux 6.5.0 + Ramdisk(busybox v1.36.1)
 
+#### 硬件平台
+天嵌E9v2卡片电脑
+![输入图片说明](doce9v2.jpg)
+![输入图片说明](doce9v2_1.jpg)
 #### 软件架构
 开发主机：树莓派4B  
 主机系统：Raspberry Pi OS Lite (Debian version: 11 (bullseye))  
