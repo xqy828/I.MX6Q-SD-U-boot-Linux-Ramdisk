@@ -4,11 +4,10 @@
 I.MX6Q SD卡启动 + U-boot 2023.10-rc2 + Linux 6.5.0 + Ramdisk(busybox v1.36.1)
 
 #### 软件架构
-软件架构说明
-开发主机：树莓派4B
-主机系统：Raspberry Pi OS Lite (Debian version: 11 (bullseye))
-gcc 工具：arm-none-linux-gnueabihf-gcc 
-gcc 版本：gcc version 12.3.1 20230626 (Arm GNU Toolchain 12.3.Rel1 (Build arm-12.35))
+开发主机：树莓派4B  
+主机系统：Raspberry Pi OS Lite (Debian version: 11 (bullseye))  
+gcc 工具：arm-none-linux-gnueabihf-gcc   
+gcc 版本：gcc version 12.3.1 20230626 (Arm GNU Toolchain 12.3.Rel1 (Build arm-12.35))  
 
 #### 安装教程
 1.  linux 内核编译
