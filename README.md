@@ -13,14 +13,13 @@ gcc 版本：gcc version 12.3.1 20230626 (Arm GNU Toolchain 12.3.Rel1 (Build arm
 #### 安装教程
 1.  linux 内核编译
     cd linux-6.5 路径下执行build.sh 脚本
-    编译完成后在 arch/arm/boot/ 下生成zImage 文件
-    在arch/arm/boot/dts/nxp/imx/ 下生成imx6q-sabresd.dtb 文件
+    编译完成后在 arch/arm/boot/ 下生成zImage 文件，在arch/arm/boot/dts/nxp/imx/ 下生成imx6q-sabresd.dtb 文件  
 2.  u-boot 源码编译
     cd u-boot-2023.10-rc2 路径下执行build.sh 
     编译完成后 生成 u-boot-with-spl.imx 文件
 3.  busybox 源码编译
-    cd busybox-1.36.1 路径下创建busybox_install文件夹
-    根目录下执行build.sh，编译 安装 完成后在busybox_install 路径内生成最小文件系统
+    cd busybox-1.36.1 路径下创建busybox_install文件夹  
+    根目录下执行build.sh，编译 安装 完成后在busybox_install 路径内生成最小文件系统  
 
 #### 使用说明
 1.  将 uboot 镜像烧录至SD卡
@@ -33,7 +32,7 @@ gcc 版本：gcc version 12.3.1 20230626 (Arm GNU Toolchain 12.3.Rel1 (Build arm
     cd u-boot-2023.10-rc2/boot_scr , 更具需求更改boot.cmd.user 文件， 执行 ./make_boot_scr.sh ,在当前路径下生成boot.scr 文件。
 
 #### 源码修改说明
-1、linux内核源码当前修改仅支持调试串口、SD/MMC 、以太网，其他外设暂未移植
+1、linux内核源码当前修改仅支持调试串口、SD/MMC 、以太网，其他外设暂未移植  
 2、u-boot 采用SPL + U-Boot 方式进行引导
 #### 参与贡献
 
