@@ -49,6 +49,8 @@ function make_rootfs_image()
     echo "### cppy ${WORK_DIR} to ${MOUNT_DIR} ###"
     cp -af ${WORK_DIR}/* ${MOUNT_DIR}/. || exit 1
     sync || exit 1
+    echo "### change ${MOUNT_DIR} permissions ###"
+    chown -R root:root ${MOUNT_DIR}
     echo "### umount ${MOUNT_DIR} ###"
     umount ${MOUNT_DIR} || exit 1
     echo "### gzip -9  ${raw_image_file}.gz ###"
