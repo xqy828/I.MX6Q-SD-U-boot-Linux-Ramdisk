@@ -57,12 +57,14 @@ function make_rootfs_image()
     echo "### gzip -9  ${raw_image_file}.gz ###"
     gzip -9 ${OUTPUT_DIR}/${raw_image_file} || exit 1
     echo "### make ${raw_image_file}.gz to ${final_compress_file} ###"
-    if [ ${ARCH}="x86_64" ]; then
+    echo "ARCH=${ARCH}"
+    if [ ${ARCH} = "x86_64" ]; then
         ./mkimage_x86 -A arm -T ramdisk -d ${OUTPUT_DIR}/${raw_image_file}.gz ${OUTPUT_DIR}/${final_compress_file} || exit 1
-    elif [ ${ARCH}="aarch64" ]; then
+    elif [ ${ARCH} = "aarch64" ]; then
         ./mkimage -A arm -T ramdisk -d ${OUTPUT_DIR}/${raw_image_file}.gz ${OUTPUT_DIR}/${final_compress_file} || exit 1
     else
         echo "arch is invalid"
+        exit 1
     fi
     rm -rf ${MOUNT_DIR} || exit 1
     rm -rf ${WORK_DIR} || exit 1
