@@ -1,15 +1,26 @@
 #!/bin/bash
+PARALLEL=`cat /proc/cpuinfo | grep cores | wc -l`
 start_time=$(date +%s)
-export ARCH=arm
-export CROSS_COMPILE=arm-none-linux-gnueabihf-
-export PATH=$PATH:/opt/arm-gnu-toolchain-12.3.rel1-aarch64-arm-none-linux-gnueabihf/bin
+HOST_ARCH=`uname -m`
+if [ ${ARCH}="x86_64" ]; then
+    export ARCH=arm
+    export CROSS_COMPILE=arm-none-linux-gnueabihf-
+    export PATH=$PATH:/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-linux-gnueabihf/bin
+elif [ ${ARCH}="aarch64" ]; then
+    export ARCH=arm
+    export CROSS_COMPILE=arm-none-linux-gnueabihf-
+    export PATH=$PATH:/opt/arm-gnu-toolchain-12.3.rel1-aarch64-arm-none-linux-gnueabihf/bin
+else
+    echo "HOST ARCH IS INVALID"
+fi
 echo make distclen
 make distclean
 echo make imx_v6_v7_defconfig
 make imx_v6_v7_defconfig
 #make menuconfig
-echo make
-make -j4   
+echo "make -j${PARALLEL}"
+make -j${PARALLEL}
+#make -j4
 end_time=$(date +%s)
 cost_time=$[ $end_time-$start_time ]
 echo "build kernel time is $(($cost_time/60))min $(($cost_time%60))s"

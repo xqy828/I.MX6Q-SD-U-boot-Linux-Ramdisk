@@ -10,6 +10,7 @@ MOUNT_DIR=${OUTPUT_DIR}/IMX6Q_RFS_IMAGE_MOUNT_${CUR_DATE}_${CUR_TIME}
 WORK_DIR=${CUR_DIR}/work_dir
 final_compress_file=ramdisk.image
 raw_image_file=ramdisk_${CUR_DATE}_${CUR_TIME}.image
+ARCH=`uname -m`
 
 build_date_rootfs()
 {
@@ -56,7 +57,13 @@ function make_rootfs_image()
     echo "### gzip -9  ${raw_image_file}.gz ###"
     gzip -9 ${OUTPUT_DIR}/${raw_image_file} || exit 1
     echo "### make ${raw_image_file}.gz to ${final_compress_file} ###"
-    ./mkimage -A arm -T ramdisk -d ${OUTPUT_DIR}/${raw_image_file}.gz ${OUTPUT_DIR}/${final_compress_file} || exit 1
+    if [ ${ARCH}="x86_64" ]; then
+        ./mkimage_x86 -A arm -T ramdisk -d ${OUTPUT_DIR}/${raw_image_file}.gz ${OUTPUT_DIR}/${final_compress_file} || exit 1
+    elif [ ${ARCH}="aarch64" ]; then
+        ./mkimage -A arm -T ramdisk -d ${OUTPUT_DIR}/${raw_image_file}.gz ${OUTPUT_DIR}/${final_compress_file} || exit 1
+    else
+        echo "arch is invalid"
+    fi
     rm -rf ${MOUNT_DIR} || exit 1
     rm -rf ${WORK_DIR} || exit 1
 }
