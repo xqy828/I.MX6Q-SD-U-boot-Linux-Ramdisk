@@ -1,5 +1,5 @@
 #!/bin/bash
-PARALLEL=`cat /proc/cpuinfo | grep cores | wc -l`
+PARALLEL=`cat /proc/cpuinfo | grep processor | wc -l`
 start_time=$(date +%s)
 HOST_ARCH=`uname -m`
 if [ ${HOST_ARCH} = "x86_64" ]; then
