@@ -13,5 +13,9 @@ mount -t devpts devpts /dev/pts
 echo /sbin/mdev > /proc/sys/kernel/hotplug
 mdev -s
 /bin/hostname -F /etc/hostname
+echo "mount emmc..."
+mkdir /mnt/emmc
+mount  -t ext4 /dev/mmcblk3p1 /mnt/emmc -o nodelalloc,commit=5
+
 echo "rcS Complete"                                                                                                  
 echo "Welcome to imx6q"
