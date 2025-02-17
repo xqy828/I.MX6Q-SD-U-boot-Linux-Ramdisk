@@ -17,5 +17,22 @@ echo "mount emmc..."
 mkdir /mnt/emmc
 mount  -t ext4 /dev/mmcblk3p1 /mnt/emmc -o nodelalloc,commit=5
 
+kernel_version=$(uname -r)
+if [ -z "$kernel_version" ]; then
+    echo "Failed to retrieve kernel version information. Please check the system status."
+    exit 1
+fi
+folder_path="/lib/modules/$kernel_version"
+if [ -d "$folder_path" ]; then
+    echo "The folder $folder_path already exists."
+else
+    mkdir -p "$folder_path"
+    if [ $? -eq 0 ]; then
+        echo "Folder $folder_path created successfully."
+    else
+        echo "Failed to create folder $folder_path. Please check the permissions."
+        exit 1
+    fi
+fi
 echo "rcS Complete"                                                                                                  
 echo "Welcome to imx6q"
