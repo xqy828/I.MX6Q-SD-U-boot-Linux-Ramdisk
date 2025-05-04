@@ -16,8 +16,8 @@ else
 fi
 echo make distclen
 make distclean
-echo make imx_v6_v7_defconfig
-make imx_v6_v7_defconfig
+echo make imx_e9v2_defconfig
+make imx_e9v2_defconfig
 #make menuconfig
 echo "make -j${PARALLEL}"
 make -j${PARALLEL}
