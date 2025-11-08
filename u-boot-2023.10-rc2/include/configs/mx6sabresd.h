@@ -29,5 +29,8 @@
 #define CFG_MXC_USB_PORTSC		(PORT_PTS_UTMI | PORT_PTS_PTW)
 #define CFG_MXC_USB_FLAGS		0
 #endif
-
+/*   E9V2  */
+#define CONFIG_MMCROOT					"/dev/mmcblk3p2"
+#define CONFIG_SYS_MMC_ENV_PART			0	/* user partition */
+#define CONFIG_SYS_MMC_ENV_DEV			0	/* SDHC4 */
 #endif                         /* __MX6SABRESD_CONFIG_H */

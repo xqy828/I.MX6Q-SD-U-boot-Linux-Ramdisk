@@ -13,7 +13,14 @@
 #include "mx6_common.h"
 
 /* MMC Configs */
-#define CFG_SYS_FSL_ESDHC_ADDR      0
+#define CFG_SYS_FSL_ESDHC_ADDR  USDHC4_BASE_ADDR
+
+#define CONFIG_SYS_MMC_IMG_LOAD_PART	1
+#define CONFIG_BOOTLINUX \
+		"fatload mmc 2:1 ${loadaddr} zImage;" \
+		"fatload mmc 2:1 ${fdt_addr} imx6q-custom.dtb;" \
+		"run mmcargs;" \
+		"bootz ${loadaddr} - ${fdt_addr}"
 
 #ifdef CONFIG_SUPPORT_EMMC_BOOT
 #define EMMC_ENV \
@@ -38,7 +45,8 @@
 #define CFG_EXTRA_ENV_SETTINGS \
 	"script=boot.scr\0" \
 	"image=zImage\0" \
-	"fdtfile=undefined\0" \
+	"fdtfile=" CONFIG_DEFAULT_FDT_FILE "\0" \
+	"boot_linux="CONFIG_BOOTLINUX "\0"	\
 	"fdt_addr=0x18000000\0" \
 	"boot_fdt=try\0" \
 	"ip_dyn=yes\0" \
