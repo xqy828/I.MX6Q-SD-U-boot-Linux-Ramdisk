@@ -530,6 +530,8 @@ static const struct boot_mode board_boot_modes[] = {
 };
 #endif
 
+
+extern void user_init(void);
 int board_late_init(void)
 {
 #ifdef CONFIG_CMD_BMODE
@@ -546,7 +548,7 @@ int board_late_init(void)
 	else if (is_mx6sdl())
 		env_set("board_rev", "MX6DL");
 #endif
-
+    user_init();
 	return 0;
 }
 
