@@ -1,5 +1,5 @@
 #!/bin/sh
-
+EMMC_DEV="/dev/mmcblk3"
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib:/usr/lib
 runlevel=S
@@ -15,7 +15,17 @@ mdev -s
 /bin/hostname -F /etc/hostname
 echo "mount emmc..."
 mkdir /mnt/emmc
-mount  -t ext4 /dev/mmcblk3p1 /mnt/emmc -o nodelalloc,commit=5
+
+if [ -b "${EMMC_DEV}p6" ] || [ -b "${EMMC_DEV}6" ]; then
+    echo "found userdata partition ..."
+    if [ -b "${EMMC_DEV}p6" ]; then
+        mount  -t ext4 ${EMMC_DEV}p6 /mnt/emmc -o nodelalloc,commit=5
+    else
+        mount  -t ext4 ${EMMC_DEV}6 /mnt/emmc -o nodelalloc,commit=5
+    fi
+else
+    echo "warning: can't found userdata partition"
+fi
 
 kernel_version=$(uname -r)
 if [ -z "$kernel_version" ]; then
