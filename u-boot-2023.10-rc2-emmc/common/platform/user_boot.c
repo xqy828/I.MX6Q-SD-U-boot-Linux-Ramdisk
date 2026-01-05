@@ -67,7 +67,7 @@ int image_copy(struct blk_desc *desc)
 {
     int rc = 0;
     int len = 0;
-    int p = 0,i = 0;
+    int i = 0;
     IMGMAP *pImgMap = NULL;
 
     assert(desc != NULL);
