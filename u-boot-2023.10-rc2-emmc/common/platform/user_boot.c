@@ -7,7 +7,9 @@
 #include <blk.h>
 #include <console.h>
 #include <display_options.h>
-
+#include <dm.h>
+#include <dm/uclass.h>
+#include <wdt.h>
 #include "./image_map.h"
 #include "./user_boot.h"
 
@@ -145,6 +147,43 @@ int user_image_probe(void)
     }
     
     return 0;
+}
+
+/*******************************//*
+* wdt reset *
+*********************************/
+void reset_cpu(void)
+{
+#if CONFIG_IS_ENABLED(WDT)
+    struct udevice *currdev;
+    int ret;
+#if 0
+	struct udevice *dev;
+	struct uclass *uc;
+ 
+    ret = uclass_get(UCLASS_WDT, &uc);
+	if (ret)
+    {
+	    return;
+    }
+	uclass_foreach_dev(dev, uc);
+    printf("%s (%s)\n", dev->name, dev->driver->name);
+#endif    
+    ret = uclass_get_device_by_name(UCLASS_WDT,"watchdog@20bc000", &currdev);
+    if (ret) {
+	    printf("Can't get the watchdog timer: watchdog@20bc000 \n");
+	    return;
+    }
+	ret = wdt_expire_now(currdev,0);
+    if (ret == -ENOSYS) {
+        printf("Expiring watchdog timer not supported.\n");
+        return ;
+    } else if (ret) {
+        printf("Expiring watchdog timer failed (%d)\n", ret);
+        return ;
+    }
+#endif
+    return ;
 }
 
 

@@ -835,12 +835,12 @@
 };
 
 &wdog1 {
-	status = "disabled";
+	status = "okay";
 };
 
 &wdog2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_wdog>;
 	fsl,ext-reset-output;
-	status = "okay";
+	status = "disable";
 };
