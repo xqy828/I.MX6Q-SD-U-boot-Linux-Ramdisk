@@ -1,7 +1,7 @@
 # I.MX6Q-SD-U-boot-Linux-Ramdisk
 
 #### 介绍
-I.MX6Q SD卡启动 + U-boot 2023.10-rc2 + Linux 6.5.0 + Ramdisk(busybox v1.36.1)
+I.MX6Q SD卡/EMMC启动 + U-boot 2023.10-rc2 + Linux 6.5.0 + Ramdisk(busybox v1.36.1)
 
 #### 硬件平台
 天嵌E9v2卡片电脑
