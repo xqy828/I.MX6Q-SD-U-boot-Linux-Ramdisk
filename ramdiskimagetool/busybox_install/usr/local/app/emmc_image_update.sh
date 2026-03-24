@@ -7,14 +7,25 @@ KERNEL_PART="/dev/mmcblk3p3"
 ROOTFS_PART="/dev/mmcblk3p4"
 DTS_PART="/dev/mmcblk3p5"
 
+KERNEL_B_PART="/dev/mmcblk3p6"
+ROOTFS_B_PART="/dev/mmcblk3p7"
+DTS_B_PART="/dev/mmcblk3p8"
+
+
 # 显示使用帮助
 show_help() {
     echo "用法: $0 [选项] <镜像文件>"
     echo "选项:"
-    echo "  -u    烧录 U-Boot"
-    echo "  -k    烧录 Kernel"
-    echo "  -r    烧录 Ramdisk"
-    echo "  -d    烧录 Device Tree"
+    echo "  -ua    烧录 U-Boot a"
+    echo "  -ka    烧录 Kernel a"
+    echo "  -ra    烧录 Ramdisk a"
+    echo "  -da    烧录 Device Tree a"
+
+    echo "  -ub    烧录 U-Boot b"
+    echo "  -kb    烧录 Kernel b"
+    echo "  -rb    烧录 Ramdisk b"
+    echo "  -db    烧录 Device Tree b"
+
     echo "示例:"
     echo "  $0 -u uboot.bin"
     echo "  $0 -k zImage"
@@ -44,7 +55,7 @@ fi
 
 # 根据选项设置烧录参数
 case "$option" in
-    -u)
+    -ua)
         part="$UBOOT_PART"
         type="U-Boot"
         echo "正在烧录 $type..."
@@ -70,7 +81,7 @@ case "$option" in
         ;;
     -ub)
         part="$UBOOT_B_PART"
-        type="U-Boot-b"
+        type="U-Boot b"
         echo "正在烧录 $type..."
         echo "设备: $EMMC_DEV"
         echo "文件: $image_file"
@@ -83,9 +94,9 @@ case "$option" in
             exit 1
         fi
         ;; 
-    -k)
+    -ka)
         part="$KERNEL_PART"
-        type="Kernel"
+        type="Kernel a"
         echo "正在烧录 $type..."
         echo "设备: $EMMC_DEV"
         echo "文件: $image_file"
@@ -98,9 +109,24 @@ case "$option" in
             exit 1
         fi
         ;;
-    -r)
+    -kb)
+        part="$KERNEL_B_PART"
+        type="Kernel b"
+        echo "正在烧录 $type..."
+        echo "设备: $EMMC_DEV"
+        echo "文件: $image_file"
+        echo "分区: $part"
+        if dd if="$image_file" of="$part" conv=fsync; then
+            echo "$type 烧录成功!"
+            sync
+        else
+            echo "$type 烧录失败!"
+            exit 1
+        fi
+        ;;
+    -ra)
         part="$ROOTFS_PART"
-        type="Ramdisk"
+        type="Ramdisk a"
         echo "正在烧录 $type..."
         echo "设备: $EMMC_DEV"
         echo "文件: $image_file"
@@ -113,9 +139,39 @@ case "$option" in
         exit 1
         fi
         ;;
-    -d)
+    -rb)
+        part="$ROOTFS_B_PART"
+        type="Ramdisk b"
+        echo "正在烧录 $type..."
+        echo "设备: $EMMC_DEV"
+        echo "文件: $image_file"
+        echo "分区: $part"
+        if dd if="$image_file" of="$part" conv=fsync ; then
+            echo "$type 烧录成功!"
+            sync
+        else
+            echo "$type 烧录失败!"
+        exit 1
+        fi
+        ;;
+    -da)
         part="$DTS_PART"
-        type="Device Tree"
+        type="Device Tree a"
+        echo "正在烧录 $type..."
+        echo "设备: $EMMC_DEV"
+        echo "文件: $image_file"
+        echo "分区: $part"
+        if dd if="$image_file" of="$part" conv=fsync; then
+            echo "$type 烧录成功!"
+            sync
+        else
+            echo "$type 烧录失败!"
+            exit 1
+        fi
+        ;;
+    -db)
+        part="$DTS_B_PART"
+        type="Device Tree a"
         echo "正在烧录 $type..."
         echo "设备: $EMMC_DEV"
         echo "文件: $image_file"

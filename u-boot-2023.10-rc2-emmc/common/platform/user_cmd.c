@@ -31,8 +31,8 @@ static int do_user_boot(struct cmd_tbl *cmdtp, int flag, int argc,char *const ar
     char cmd[128] = {0};
     printf("user boot ... \n");
     user_image_probe();    
-    set_img_map(gstImageEmmc.desc);
-    image_copy(gstImageEmmc.desc);
+    set_img_map(gstImageEmmc.desc,USER_MODE);
+    image_copy(gstImageEmmc.desc,USER_MODE);
 
     sprintf(cmd, "bootz 0x%x 0x%x 0x%x", ZIMAGE_ADDR, RAMDISK_ADDR, FDT_ADDR);
     printf("Executing: %s\n", cmd);
@@ -41,8 +41,29 @@ static int do_user_boot(struct cmd_tbl *cmdtp, int flag, int argc,char *const ar
     return ret;
 }
 
+static int do_factory_boot(struct cmd_tbl *cmdtp, int flag, int argc,char *const argv[])
+{
+    int ret = CMD_RET_SUCCESS;
+    char cmd[128] = {0};
+    printf("factory boot ... \n");
+    user_image_probe();    
+    set_img_map(gstImageEmmc.desc,FACTORY_MODE);
+    image_copy(gstImageEmmc.desc,FACTORY_MODE);
+
+    sprintf(cmd, "bootz 0x%x 0x%x 0x%x", ZIMAGE_ADDR, RAMDISK_ADDR, FDT_ADDR);
+    printf("Executing: %s\n", cmd);
+    mdelay(10);
+    run_command(cmd, 0);
+    return ret;
+}
+
+
+
+
+
 static struct cmd_tbl user_cmd_sub[] = {
     U_BOOT_CMD_MKENT(user_boot, 1, 0, do_user_boot, "user define boot", ""),
+    U_BOOT_CMD_MKENT(factory_boot, 1, 0, do_factory_boot, "fatory define boot", ""),
 };
 
 static int do_user_cmd(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])

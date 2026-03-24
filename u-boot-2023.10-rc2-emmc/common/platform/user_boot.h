@@ -4,7 +4,6 @@
 #include <mmc.h>
 #include <blk.h>
 
-
 typedef struct
 {
     struct mmc *mmc;
@@ -12,8 +11,14 @@ typedef struct
     struct disk_partition info;
 }IMAGE_EMMC;
 
+typedef enum
+{
+    USER_MODE = 0,
+    FACTORY_MODE,
+} SYSTEM_BOOT_MODE;
+
 int user_image_probe(void);
-int set_img_map(struct blk_desc *desc);
-int image_copy(struct blk_desc *desc);
+int set_img_map(struct blk_desc *desc,unsigned int system_mode);
+int image_copy(struct blk_desc *desc,unsigned int system_mode);
 
 #endif

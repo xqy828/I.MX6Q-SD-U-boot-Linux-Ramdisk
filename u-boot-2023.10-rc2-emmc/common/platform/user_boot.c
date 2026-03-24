@@ -24,7 +24,7 @@ void user_init(void)
     env_set("bootcmd", "user_cmd user_boot");
 }
 
-int set_img_map(struct blk_desc *desc)
+int set_img_map(struct blk_desc *desc,unsigned int system_mode)
 {
     int rc = 0;
     int len = 0;
@@ -34,8 +34,18 @@ int set_img_map(struct blk_desc *desc)
     IMGMAP *pImgMap = NULL;
 
     assert(desc != NULL);
-
-    get_user_img_map(&pImgMap,&len); 
+    if(system_mode == USER_MODE)
+    {
+        get_user_img_map(&pImgMap,&len);
+    }
+    else if(system_mode == FACTORY_MODE)
+    {
+        get_factory_img_map(&pImgMap,&len); 
+    }
+    else // default
+    {
+        get_user_img_map(&pImgMap,&len);
+    } 
     local_ImgMap  = pImgMap;
     for (p = 1; p <= MAX_SEARCH_PARTITIONS; p++) 
     {
@@ -65,7 +75,7 @@ int set_img_map(struct blk_desc *desc)
     return 0;    
 }
 
-int image_copy(struct blk_desc *desc)
+int image_copy(struct blk_desc *desc,unsigned int system_mode)
 {
     int rc = 0;
     int len = 0;
@@ -74,7 +84,18 @@ int image_copy(struct blk_desc *desc)
 
     assert(desc != NULL);
     printf("Start loading image . . . \n"); 
-    get_user_img_map(&pImgMap,&len); 
+    if(system_mode == USER_MODE)
+    {
+        get_user_img_map(&pImgMap,&len);
+    }
+    else if(system_mode == FACTORY_MODE)
+    {
+        get_factory_img_map(&pImgMap,&len); 
+    }
+    else // default
+    {
+        get_user_img_map(&pImgMap,&len);
+    }
     for(i = 0; i < len;i++)
     {
         rc = blk_dread(desc, pImgMap->start, pImgMap->size, (void*)(pImgMap->vm_addr));

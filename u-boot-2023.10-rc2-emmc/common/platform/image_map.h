@@ -25,5 +25,5 @@ typedef struct
 } IMGMAP;
 
 int get_user_img_map(IMGMAP **pImgMap,int *pMapSize);
-
+int get_factory_img_map(IMGMAP **pImgMap,int *pMapSize);
 #endif

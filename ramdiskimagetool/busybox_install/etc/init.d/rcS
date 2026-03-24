@@ -16,12 +16,12 @@ mdev -s
 echo "mount emmc..."
 mkdir /mnt/emmc
 
-if [ -b "${EMMC_DEV}p6" ] || [ -b "${EMMC_DEV}6" ]; then
+if [ -b "${EMMC_DEV}p9" ] || [ -b "${EMMC_DEV}9" ]; then
     echo "found userdata partition ..."
-    if [ -b "${EMMC_DEV}p6" ]; then
-        mount  -t ext4 ${EMMC_DEV}p6 /mnt/emmc -o nodelalloc,commit=5
+    if [ -b "${EMMC_DEV}p9" ]; then
+        mount  -t ext4 ${EMMC_DEV}p9 /mnt/emmc -o nodelalloc,commit=5
     else
-        mount  -t ext4 ${EMMC_DEV}6 /mnt/emmc -o nodelalloc,commit=5
+        mount  -t ext4 ${EMMC_DEV}9 /mnt/emmc -o nodelalloc,commit=5
     fi
 else
     echo "warning: can't found userdata partition"

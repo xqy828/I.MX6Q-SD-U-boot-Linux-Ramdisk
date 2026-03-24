@@ -24,7 +24,10 @@ echo "│   2 │ env          │ 1MB    │ U-Boot 环境变量     │"
 echo "│   3 │ kernel       │ 32MB   │ Linux 内核镜像      │"
 echo "│   4 │ rootfs       │ 128MB  │ 根文件系统          │"
 echo "│   5 │ devicetree   │ 1MB    │ 设备树文件          │"
-echo "|   6 | userdata     | 7xGB   | 用户文件            |" 
+echo "│   6 │ kernel_b     │ 32MB   │ Linux 内核镜像      │"
+echo "│   7 │ rootfs_b     │ 128MB  │ 根文件系统          │"
+echo "│   8 │ devicetree_b │ 1MB    │ 设备树文件          │"
+echo "|   9 | userdata     | 7xGB   | 用户文件            |" 
 echo "└─────┴──────────────┴────────┴─────────────────────┘"
 echo ""
 
@@ -72,28 +75,59 @@ echo "开始分区..."
     echo          # 使用默认起始扇区
     echo "+${DTB_SIZE}M"    # 分区大小
     echo 8300     # Linux文件系统类型
+#===========FACTORY=========================
     echo n        # 新建分区6
     echo 6        # 分区号6
     echo          # 使用默认起始扇区
+    echo "+${KERNEL_SIZE}M" # 分区大小
+    echo 8300     # Linux文件系统类型
+    
+    echo n        # 新建分区7
+    echo 7        # 分区号7
+    echo          # 使用默认起始扇区
+    echo "+${ROOTFS_SIZE}M" # 分区大小
+    echo 8300     # Linux文件系统类型
+    
+    echo n        # 新建分区8
+    echo 8        # 分区号8
+    echo          # 使用默认起始扇区
+    echo "+${DTB_SIZE}M"    # 分区大小
+    echo 8300     # Linux文件系统类型
+
+    echo n        # 新建分区9
+    echo 9        # 分区号9
+    echo          # 使用默认起始扇区
     echo          # 使用默认结束扇区（占用所有剩余空间）
     echo 8300     # Linux文件系统类型
+#===========================================
     echo c        # 修改分区名称
     echo 1        # 分区1
-    echo "u-boot-bak" # 分区名称
+    echo "u-boot_b" # 分区名称
     echo c        # 修改分区名称
     echo 2        # 分区2
     echo "env"    # 分区名称
     echo c        # 修改分区名称
     echo 3        # 分区3
-    echo "kernel" # 分区名称
+    echo "kernel_a" # 分区名称
     echo c        # 修改分区名称
     echo 4        # 分区4
-    echo "rootfs" # 分区名称
+    echo "rootfs_a" # 分区名称
     echo c        # 修改分区名称
     echo 5        # 分区5
-    echo "devicetree" # 分区名称
+    echo "devicetree_a" # 分区名称
+
     echo c        # 修改分区名称
     echo 6        # 分区6
+    echo "kernel_b" # 分区名称
+    echo c        # 修改分区名称
+    echo 7        # 分区7
+    echo "rootfs_b" # 分区名称
+    echo c        # 修改分区名称
+    echo 8        # 分区8
+    echo "devicetree_b" # 分区名称
+
+    echo c        # 修改分区名称
+    echo 9        # 分区9
     echo "userdata" # 分区名称
     echo p        # 打印分区表（预览）
     echo w        # 写入磁盘
@@ -107,12 +141,12 @@ echo ""
 sleep 1
 sync
 
-if [ -b "${EMMC_DEV}p6" ] || [ -b "${EMMC_DEV}6" ]; then
+if [ -b "${EMMC_DEV}p9" ] || [ -b "${EMMC_DEV}9" ]; then
     echo "格式化userdata分区..."
-    if [ -b "${EMMC_DEV}p6" ]; then
-        mkfs.ext4 -F -L "USERDATA" "${EMMC_DEV}p6"
+    if [ -b "${EMMC_DEV}p9" ]; then
+        mkfs.ext4 -F -L "USERDATA" "${EMMC_DEV}p9"
     else
-        mkfs.ext4 -F -L "USERDATA" "${EMMC_DEV}6"
+        mkfs.ext4 -F -L "USERDATA" "${EMMC_DEV}9"
     fi
 else
     echo "警告：userdata分区未找到，跳过格式化"
