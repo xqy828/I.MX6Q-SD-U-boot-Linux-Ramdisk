@@ -84,7 +84,9 @@ U_BOOT_CMD(
     8,
     1,
     do_user_cmd,
-    "input user sub cmd",
-    ""
+    "user cmd - custom user command",
+    "Usage:\n"
+    "factory_boot\n"
+    "user_boot\n"
     );
 
