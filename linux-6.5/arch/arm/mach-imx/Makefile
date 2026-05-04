@@ -65,3 +65,5 @@ obj-$(CONFIG_SOC_IMXRT) += mach-imxrt.o
 obj-$(CONFIG_SOC_VF610) += mach-vf610.o
 
 obj-$(CONFIG_SOC_LS1021A) += mach-ls1021a.o
+obj-$(CONFIG_SOC_IMX6) += imx6q_early_uart.o
+

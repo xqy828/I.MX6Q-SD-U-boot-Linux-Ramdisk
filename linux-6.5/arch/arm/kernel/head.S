@@ -68,7 +68,10 @@ kernel_sec_end:
 	add	\rd, \phys, #TEXT_OFFSET
 	sub	\rd, \rd, #PG_DIR_SIZE
 	.endm
-
+.extern imx_early_uart1_init
+.extern imx_early_uart1_puts_hello
+.extern imx_early_uart1_setbrg
+.extern imx_early_uart1_putc
 /*
  * Kernel startup entry point.
  * ---------------------------
@@ -97,7 +100,9 @@ ENTRY(stext)
  THUMB(	bx	r9		)	@ If this is a Thumb-2 kernel,
  THUMB(	.thumb			)	@ switch to Thumb now.
  THUMB(1:			)
-
+    bl imx_early_uart1_init
+    bl imx_early_uart1_setbrg
+    bl imx_early_uart1_puts_hello
 #ifdef CONFIG_ARM_VIRT_EXT
 	bl	__hyp_stub_install
 #endif
