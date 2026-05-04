@@ -6,3 +6,4 @@
 obj-y += image_map.o
 obj-y += user_cmd.o
 obj-y += user_boot.o
+obj-y += imx6q_early_uart.o
