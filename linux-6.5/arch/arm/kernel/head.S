@@ -69,9 +69,8 @@ kernel_sec_end:
 	sub	\rd, \rd, #PG_DIR_SIZE
 	.endm
 .extern imx_early_uart1_init
-.extern imx_early_uart1_puts_hello
+.extern imx_early_uart1_puts_early_msg
 .extern imx_early_uart1_setbrg
-.extern imx_early_uart1_putc
 /*
  * Kernel startup entry point.
  * ---------------------------
@@ -102,7 +101,7 @@ ENTRY(stext)
  THUMB(1:			)
     bl imx_early_uart1_init
     bl imx_early_uart1_setbrg
-    bl imx_early_uart1_puts_hello
+    bl imx_early_uart1_puts_early_msg
 #ifdef CONFIG_ARM_VIRT_EXT
 	bl	__hyp_stub_install
 #endif

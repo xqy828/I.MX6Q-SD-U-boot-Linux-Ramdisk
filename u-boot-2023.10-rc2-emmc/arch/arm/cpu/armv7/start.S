@@ -19,9 +19,8 @@
 #include <asm/armv7.h>
 #include <system-constants.h>
 .extern imx_early_uart1_init
-.extern imx_early_uart1_puts_hello
+.extern imx_early_uart1_puts_early_msg
 .extern imx_early_uart1_setbrg
-.extern imx_early_uart1_putc
 /*************************************************************************
  *
  * Startup Code (reset vector)
@@ -42,7 +41,7 @@
 reset:
     bl imx_early_uart1_init
     bl imx_early_uart1_setbrg
-    bl imx_early_uart1_puts_hello
+    bl imx_early_uart1_puts_early_msg
 	/* Allow the board to save important registers */
 	b	save_boot_params
 save_boot_params_ret:
