@@ -129,7 +129,7 @@ imx_early_uart1_putc:
     pop {r4,r5, pc}
 .endfunc 
 
-.func imx_early_uart1_puts_hello
+.func imx_early_uart1_puts_early_msg
 imx_early_uart1_puts_early_msg:
     push {r4,r5,r6,r7, lr}
     ldr r4,=UART1_BASE_ADDR
